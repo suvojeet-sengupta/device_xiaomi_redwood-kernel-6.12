@@ -1,20 +1,56 @@
 # device_xiaomi_redwood-kernel-6.12
 
-Prebuilt **6.12.81-Suvkernel** for redwood (POCO X5 Pro 5G / Redmi Note 12 Pro 5G, SM7325):
-Qualcomm KERNEL.PLATFORM.5.0.r48-00400 (android16-6.12) with the redwood port from
-[redwood-6.12-kernel](https://github.com/suvojeet-sengupta/redwood-6.12-kernel) (branch `r48`).
+A ready-to-use **Linux 6.12** kernel for the **Redmi Note 12 Pro 5G / POCO
+X5 Pro 5G** (`redwood`, SM7325), for building a ROM. Nothing here has to be
+compiled: the ROM build just copies these files in.
 
-| Path | What |
+The kernel is **6.12.81-Suvkernel**, built from the `r48` branch of
+[redwood-6.12-kernel](https://github.com/suvojeet-sengupta/redwood-6.12-kernel).
+`build-info.txt` says exactly which build this is.
+
+## What's inside
+
+| File | What it is |
 |---|---|
-| `Image` | kernel |
-| `dtb/` | Yupik base DTB (name kept for BoardConfig) |
-| `dtbo.img` | redwood overlay |
-| `vendor_ramdisk/` | every module plus `modules.load` (first stage init loads them in that order) |
-| `kernel-headers/` | the 5.4 headers the ROM userspace is built against (unchanged) |
+| `Image` | The kernel |
+| `dtb/` | The SoC device tree (the file name is kept so the device tree finds it) |
+| `dtbo.img` | redwood's own hardware description, laid over the SoC one |
+| `vendor_ramdisk/` | Every kernel module, plus `modules.load`, the order they load in |
+| `kernel-headers/` | The 5.4 kernel headers. On purpose: the phone's vendor userspace was built against them |
+| `build-info.txt` | Kernel version, build date and module count |
 
-Device tree side: `BOARD_VENDOR_RAMDISK_KERNEL_MODULES` from `vendor_ramdisk/*.ko`,
-`..._LOAD` from `vendor_ramdisk/modules.load`, `BOARD_DO_NOT_STRIP_VENDOR_RAMDISK_MODULES := true`
-(the GKI modules for Wi-Fi and Bluetooth must keep their signatures) and
-`clk_ignore_unused pd_ignore_unused` on the kernel command line.
+## How to use it
 
-Built by `scripts/make-prebuilt.sh` in [redwood-6.12](https://github.com/suvojeet-sengupta/redwood-6.12). See `build-info.txt`.
+Use the `clo-6.12` branch of the redwood device tree. It already points
+here, and the `clo-6.12-setup` branch has a manifest that syncs everything
+for you.
+
+If you wire it into another device tree yourself, it needs:
+
+```make
+KERNEL_PATH := device/xiaomi/redwood-kernel-6.12
+TARGET_PREBUILT_KERNEL := $(KERNEL_PATH)/Image
+TARGET_BOARD_KERNEL_HEADERS := $(KERNEL_PATH)/kernel-headers
+BOARD_PREBUILT_DTBOIMAGE := $(KERNEL_PATH)/dtbo.img
+BOARD_PREBUILT_DTBIMAGE_DIR := $(KERNEL_PATH)/dtb
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES := $(wildcard $(KERNEL_PATH)/vendor_ramdisk/*.ko)
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := $(strip $(shell cat $(KERNEL_PATH)/vendor_ramdisk/modules.load))
+# Wi-Fi and Bluetooth use signed GKI modules: stripping breaks the signature
+BOARD_DO_NOT_STRIP_VENDOR_RAMDISK_MODULES := true
+# Keep the bootloader's splash screen clocks alive until the display takes over
+BOARD_KERNEL_CMDLINE += clk_ignore_unused pd_ignore_unused
+```
+
+## Before you flash
+
+- This is a different kernel from the stock 5.4 one, and `/data` is shared
+  between the two slots. Back up your data before trying it.
+- Don't mix it with a 5.4 boot or vendor_boot image: the modules only load
+  on this exact kernel build.
+
+## Updating
+
+The files are made by `scripts/make-prebuilt.sh` in
+[redwood-6.12](https://github.com/suvojeet-sengupta/redwood-6.12) after
+every kernel change. Each commit here says which kernel commit its files
+came from.
