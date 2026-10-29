@@ -4,7 +4,7 @@ A ready-to-use **Linux 6.12** kernel for the **Redmi Note 12 Pro 5G / POCO
 X5 Pro 5G** (`redwood`, SM7325), for building a ROM. Nothing here has to be
 compiled: the ROM build just copies these files in.
 
-The kernel is **6.12.81-Suvkernel**, built from the `r48` branch of
+The kernel is **6.12.96-Suvkernel** (Linux 6.12.96), built from the `main` branch of
 [redwood-6.12-kernel](https://github.com/suvojeet-sengupta/redwood-6.12-kernel).
 `build-info.txt` says exactly which build this is.
 
