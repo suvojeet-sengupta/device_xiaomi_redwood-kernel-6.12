@@ -25,7 +25,10 @@ Use the `clo-6.12` branch of the redwood device tree. It already points
 here, and the `clo-6.12-setup` branch has a manifest that syncs everything
 for you.
 
-If you wire it into another device tree yourself, it needs:
+Any other redwood device tree, AOSP or AOSPA, works too, even one made for
+the stock 5.4 kernel: this kernel understands the 5.4-era `post_boot`
+script, sysfs paths, Wi-Fi config and media script those trees ship. Wire
+it in with:
 
 ```make
 KERNEL_PATH := device/xiaomi/redwood-kernel-6.12
@@ -37,9 +40,12 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES := $(wildcard $(KERNEL_PATH)/vendor_ramdisk/
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := $(strip $(shell cat $(KERNEL_PATH)/vendor_ramdisk/modules.load))
 # Wi-Fi and Bluetooth use signed GKI modules: stripping breaks the signature
 BOARD_DO_NOT_STRIP_VENDOR_RAMDISK_MODULES := true
-# Keep the bootloader's splash screen clocks alive until the display takes over
-BOARD_KERNEL_CMDLINE += clk_ignore_unused pd_ignore_unused
 ```
+
+and drop the 5.4 kernel's own module lists and `vendor_dlkm` modules, if
+the tree has any. If the ROM builds with Dolby, which sets
+`debug.c2.use_dmabufheaps=1`, set it back to `0` (for example `on
+early-boot` in an init script): otherwise videos don't play.
 
 ## Before you flash
 
