@@ -1,3 +1,3 @@
 release=6.12.81-Suvkernel
-version=Linux version 6.12.81-Suvkernel (kleaf@build-host) (Android (14043575, +pgo, +bolt, +lto, +mlgo, based on r536225) clang version 19.0.1 (https://android.googlesource.com/toolchain/llvm-project b3a530ec6537146650e42be89f1089e9a3588460), LLD 19.0.1) #1 SMP PREEMPT Thu Oct 29 06:20:54 UTC 2026
+version=Linux version 6.12.81-Suvkernel (kleaf@build-host) (Android (14043575, +pgo, +bolt, +lto, +mlgo, based on r536225) clang version 19.0.1 (https://android.googlesource.com/toolchain/llvm-project b3a530ec6537146650e42be89f1089e9a3588460), LLD 19.0.1) #1 SMP PREEMPT Thu Oct 29 07:04:19 UTC 2026
 modules=341
