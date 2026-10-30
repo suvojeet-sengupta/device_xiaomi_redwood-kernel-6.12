@@ -325,7 +325,6 @@ aw8697-haptic.ko
 ir-spi.ko
 mi_thermal.ko
 xiaomi_touch.ko
-focaltech_touch.ko
 subsys_compat.ko
 tipc.ko
 tipc_diag.ko
