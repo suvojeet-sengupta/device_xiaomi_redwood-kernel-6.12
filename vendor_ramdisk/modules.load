@@ -341,3 +341,4 @@ bluetooth.ko
 hci_uart.ko
 btpower.ko
 bt_fm_slim.ko
+rust_binder.ko
