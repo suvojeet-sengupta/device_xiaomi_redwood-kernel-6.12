@@ -323,6 +323,7 @@ goodix_fp.ko
 xiaomi_fp.ko
 aw8697-haptic.ko
 ir-spi.ko
+nxp-nci.ko
 mi_thermal.ko
 xiaomi_touch.ko
 focaltech_touch.ko
